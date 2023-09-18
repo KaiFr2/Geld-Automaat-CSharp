@@ -1,0 +1,48 @@
+﻿<Window x:Class="Geld_Automaat.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Geld_Automaat"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid x:Name="homescreen" Visibility="Visible">
+            <TextBox x:Name="RekeningnummerTextBox" HorizontalAlignment="Left" Margin="400,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+            <TextBox x:Name="PincodeTextBox" HorizontalAlignment="Left" Margin="400,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
+            <Button Content="1" Width="50" Height="50" HorizontalAlignment="Left" Margin="298,126,0,0" VerticalAlignment="Top" Click="Button_Click_num1"/>
+            <Button Content="2" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click_num2" Margin="379,126,0,0"/>
+            <Button Content="3" Width="50" Height="50" HorizontalAlignment="Left" Margin="464,126,0,0" VerticalAlignment="Top" Click="Button_Click_num3"/>
+            <Button Content="4" Width="50" Height="50" HorizontalAlignment="Left" Margin="298,0,0,0" VerticalAlignment="Center" Click="Button_Click_num4"/>
+            <Button Content="5" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,0,0,0" VerticalAlignment="Center" Click="Button_Click_num5"/>
+            <Button Content="6" Width="50" Height="50" HorizontalAlignment="Left" Margin="464,0,0,0" VerticalAlignment="Center" Click="Button_Click_num6" RenderTransformOrigin="1.054,0.199"/>
+            <Button Content="7" Width="50" Height="50" HorizontalAlignment="Left" Margin="298,259,0,0" VerticalAlignment="Top" Click="Button_Click_num7"/>
+            <Button Content="8" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,259,0,0" VerticalAlignment="Top" Click="Button_Click_num8"/>
+            <Button Content="9" Width="50" Height="50" HorizontalAlignment="Left" Margin="464,259,0,0" VerticalAlignment="Top" Click="Button_Click_num9"/>
+            <Button Content="0" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,338,0,0" VerticalAlignment="Top" Click="Button_Click_num0"/>
+            <Button Content="Enter" Width="51" Height="50" HorizontalAlignment="Left" Margin="464,338,0,0" VerticalAlignment="Top" Click="Button_Click_enter"/>
+            <Button Content="Delete" Width="50" Height="50" HorizontalAlignment="Left" Margin="298,338,0,0" VerticalAlignment="Top" Click="Button_Click_delete"/>
+            <Button Content="Admin" HorizontalAlignment="Left" Margin="718,49,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        </Grid>
+        <Grid x:Name="options" Visibility="Hidden">
+            <Button Content="Opnemen" HorizontalAlignment="Center" Margin="0,328,0,0" VerticalAlignment="Top" Click="Button_Click" Height="51" Width="110"/>
+            <Button Content="Storten" HorizontalAlignment="Center" Margin="0,247,0,0" VerticalAlignment="Top" Height="57" Width="108" Click="Button_Storten"/>
+            <Button Content="Overmaken" HorizontalAlignment="Center" Margin="0,162,0,0" VerticalAlignment="Top" Height="55" Width="110"/>
+            <Label x:Name="WelcomeLabel" Content="Welkom" HorizontalAlignment="Center" Margin="0,41,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="SaldoLabel" Content="Je saldo is" HorizontalAlignment="Center" Margin="0,89,0,0" VerticalAlignment="Top"/>
+        </Grid>
+        <Grid x:Name="storten" Visibility="Hidden">
+            <Label x:Name="Saldo2" Content="Je saldo is:" HorizontalAlignment="Left" Margin="378,78,0,0" VerticalAlignment="Top"/>
+            <Button Content="100" HorizontalAlignment="Center" Margin="0,179,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_StortGeld100"/>
+            <Button Content="200" HorizontalAlignment="Left" Margin="132,0,0,0" VerticalAlignment="Center" Height="66" Width="128" />
+
+            <Button Content="500" HorizontalAlignment="Left" Margin="532,0,0,0" VerticalAlignment="Center" Height="66" Width="128" />
+
+        </Grid>
+        <Grid x:Name="admindjalla" Visibility="Hidden">
+            <TextBox x:Name="gebruikernaam" HorizontalAlignment="Center" Margin="0,146,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+            <PasswordBox x:Name="password" HorizontalAlignment="Center" Margin="0,201,0,0" VerticalAlignment="Top"/>
+            <Button Content="Log in" HorizontalAlignment="Center" Margin="0,242,0,0" VerticalAlignment="Top" Height="58" Width="104" Click="Button_Admin_login"/>
+        </Grid>
+    </Grid>
+</Window>
