@@ -23,6 +23,7 @@ namespace Geld_Automaat
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -86,14 +87,7 @@ namespace Geld_Automaat
             }
         }
 
-        private void PinDigitButton_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            string digit = button.Content.ToString();
-            PincodeTextBox.Text += digit;
-        }
-
-
+        //Button enter
         private void Button_Click_enter(object sender, RoutedEventArgs e)
         {
             string enteredRekeningnummer = RekeningnummerTextBox.Text;
@@ -144,7 +138,7 @@ namespace Geld_Automaat
             }
         }
 
-
+        //Delete knop
         private void Button_Click_delete(object sender, RoutedEventArgs e)
         {
             if (PincodeTextBox.Text.Length > 0)
@@ -159,6 +153,7 @@ namespace Geld_Automaat
 
         }
 
+        //Admin login button
         private void Button_Admin_login(object sender, RoutedEventArgs e)
         {
             string enteredUsername = gebruikernaam.Text; 
@@ -199,6 +194,7 @@ namespace Geld_Automaat
             }
         }
 
+        //Storten pagina
         private void Button_Storten(object sender, RoutedEventArgs e)
         {
             options.Visibility = Visibility.Hidden;
@@ -237,35 +233,35 @@ namespace Geld_Automaat
             homescreen.Visibility = Visibility.Hidden;
         }
 
+
+        //100 euro storten button
         private void Button_StortGeld100(object sender, RoutedEventArgs e)
         {
-            // Get the user's rekeningnummer from wherever it's stored (you may need to modify this)
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Replace with the actual user's rekeningnummer
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; 
 
-            myDBconnection dbConnection = new myDBconnection(); // Create an instance of your database connection class
+            myDBconnection dbConnection = new myDBconnection(); 
 
             try
             {
                 if (dbConnection.Connect())
                 {
-                    // Begin a database transaction
                     using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
                     {
                         try
                         {
-                            // Update the saldo in the 'Rekeningen' table by subtracting 100
-                            string updateSaldoSql = "UPDATE Rekeningen SET saldo = saldo + 100 WHERE rekeningnummer = @Rekeningnummer";
-                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
+                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 100 WHERE `rekeningen`.`rekeningnummer` = '{enteredRekeningnummer}'";
+
+                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);                            
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            // Record the deposit transaction
-                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
-                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                          // Record the deposit transaction
+                          //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, @Tijd, 2, 100)";
+                          //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                          //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                            insertTransactionCommand.ExecuteNonQuery();
+                          //  insertTransactionCommand.ExecuteNonQuery();
 
                             // Commit the transaction
                             transaction.Commit();
@@ -300,25 +296,45 @@ namespace Geld_Automaat
             }
         }
 
-        private void UpdateUserSaldo(string rekeningnummer)
+
+        //200 euro storten button
+        private void Button_StortGeld200(object sender, RoutedEventArgs e)
         {
-            myDBconnection dbConnection = new myDBconnection(); // Create an instance of your database connection class
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+
+            myDBconnection dbConnection = new myDBconnection();
 
             try
             {
                 if (dbConnection.Connect())
                 {
-                    // Create a SQL command to retrieve the user's updated saldo
-                    string sql = "SELECT saldo FROM Rekeningen WHERE rekeningnummer = @Rekeningnummer";
-                    MySqlCommand command = new MySqlCommand(sql, dbConnection.connection);
-                    command.Parameters.AddWithValue("@Rekeningnummer", rekeningnummer);
-
-                    using (MySqlDataReader reader = command.ExecuteReader())
+                    using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
                     {
-                        if (reader.Read())
+                        try
                         {
-                            // Update the Saldo2 label with the updated saldo
-                            Saldo2.Content = "Saldo: " + reader.GetInt32("saldo") + " euros";
+                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 200 WHERE `rekeningen`.`rekeningnummer` = '{enteredRekeningnummer}'";
+
+                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
+                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                            updateSaldoCommand.ExecuteNonQuery();
+
+                            // Commit the transaction
+                            transaction.Commit();
+
+                            // Show a success message
+                            MessageBox.Show("Deposit successful. 200 euros added to your account.");
+
+                            // Update the user's saldo label
+                            UpdateUserSaldo(enteredRekeningnummer);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Something went wrong, rollback the transaction
+                            transaction.Rollback();
+
+                            Console.WriteLine("Error: " + ex.Message);
+                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
                         }
                     }
                 }
@@ -332,8 +348,99 @@ namespace Geld_Automaat
             {
                 // Handle any exceptions, e.g., database errors
                 Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("An error occurred. Please try again later.");
+            }
+        }
+
+
+        //500 euro storten button
+        private void Button_StortGeld500(object sender, RoutedEventArgs e)
+        {
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+
+            myDBconnection dbConnection = new myDBconnection();
+
+            try
+            {
+                if (dbConnection.Connect())
+                {
+                    using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 500 WHERE `rekeningen`.`rekeningnummer` = '{enteredRekeningnummer}'";
+
+                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
+                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                            updateSaldoCommand.ExecuteNonQuery();
+
+                            // Commit the transaction
+                            transaction.Commit();
+
+                            // Show a success message
+                            MessageBox.Show("Deposit successful. 500 euros added to your account.");
+
+                            // Update the user's saldo label
+                            UpdateUserSaldo(enteredRekeningnummer);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Something went wrong, rollback the transaction
+                            transaction.Rollback();
+
+                            Console.WriteLine("Error: " + ex.Message);
+                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
+                        }
+                    }
+                }
+                else
+                {
+                    // Connection to the database failed
+                    MessageBox.Show("Database connection failed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions, e.g., database errors
+                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("An error occurred. Please try again later.");
+            }
+        }
+
+        //Gebruiker saldo updaten
+        private void UpdateUserSaldo(string rekeningnummer)
+        {
+            myDBconnection dbConnection = new myDBconnection();
+
+            try
+            {
+                if (dbConnection.Connect())
+                {
+                    string sql = "SELECT saldo FROM Rekeningen WHERE rekeningnummer = @Rekeningnummer";
+                    MySqlCommand command = new MySqlCommand(sql, dbConnection.connection);
+                    command.Parameters.AddWithValue("@Rekeningnummer", rekeningnummer);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            Saldo2.Content = "Saldo: " + reader.GetInt32("saldo") + " euros";
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Database connection failed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
                 MessageBox.Show("An error occurred while updating saldo. Please try again later.");
             }
         }
     }
 }
+
+
