@@ -111,35 +111,45 @@ namespace Geld_Automaat
         //Button enter
         private void Button_Click_enter(object sender, RoutedEventArgs e)
         {
-            string enteredRekeningnummer = RekeningnummerTextBox.Text;
-            string enteredPincode = PincodeTextBox.Text; 
+            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text);
+            string enteredPincode = EncryptString(PincodeTextBox.Text);
 
-            myDBconnection dbConnection = new myDBconnection(); 
+            myDBconnection dbConnection = new myDBconnection();
 
             try
             {
                 if (dbConnection.Connect())
                 {
-                    string sql = "SELECT Rekeningnummer, saldo FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer AND Pincode = @Pincode";
+                    string sql = "SELECT Rekeningnummer, saldo, Pincode FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
 
                     MySqlCommand command = new MySqlCommand(sql, dbConnection.connection);
                     command.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-                    command.Parameters.AddWithValue("@Pincode", enteredPincode);
 
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            string rekeningnummer = reader["Rekeningnummer"].ToString();
-                            int saldo = Convert.ToInt32(reader["saldo"]);
+                            // Retrieve the encrypted rekeningnummer from the database
+                            string storedRekeningnummer = reader["Rekeningnummer"].ToString();
+                            string storedPincode = reader["Pincode"].ToString();
 
-                            MessageBox.Show("Login Successful. Welcome to the ATM!");
+                            if (enteredRekeningnummer == storedRekeningnummer && enteredPincode == storedPincode)
+                            {
+                                int saldo = Convert.ToInt32(reader["saldo"]);
 
-                            homescreen.Visibility = Visibility.Hidden;
-                            options.Visibility = Visibility.Visible;
+                                MessageBox.Show("Login Successful. Welcome to the ATM!");
 
-                            WelcomeLabel.Content = "Welkom, Rekeningnummer: " + rekeningnummer;
-                            SaldoLabel.Content = "Je saldo: " + saldo;
+                                homescreen.Visibility = Visibility.Hidden;
+                                options.Visibility = Visibility.Visible;
+
+                                // Display a message without showing the original rekeningnummer
+                                WelcomeLabel.Content = "Welcome to the ATM!";
+                                SaldoLabel.Content = "Your saldo: " + saldo;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Invalid Rekeningnummer or PIN. Please try again.");
+                            }
                         }
                         else
                         {
@@ -158,6 +168,8 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
+
+
 
         //Delete knop
         private void Button_Click_delete(object sender, RoutedEventArgs e)
@@ -221,34 +233,47 @@ namespace Geld_Automaat
             options.Visibility = Visibility.Hidden;
             storten.Visibility = Visibility.Visible;
 
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; 
-            myDBconnection dbConnection = new myDBconnection(); 
+            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+
+            myDBconnection dbConnection = new myDBconnection();
 
             try
             {
                 if (dbConnection.Connect())
                 {
                     string sql = "SELECT saldo FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
-                
+
                     MySqlCommand command = new MySqlCommand(sql, dbConnection.connection);
                     command.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-                    
-                    int saldo = Convert.ToInt32(command.ExecuteScalar());
-                   
-                    Saldo2.Content = "Je saldo is: " + saldo;
+
+                    // ExecuteScalar is used to retrieve a single value (saldo) from the database
+                    object result = command.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        // Convert the result to an integer
+                        int saldo = Convert.ToInt32(result);
+
+                        Saldo2.Content = "Je saldo is: " + saldo;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Rekeningnummer not found.");
+                    }
                 }
                 else
-                {                    
+                {
                     MessageBox.Show("Database connection failed.");
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 Console.WriteLine("Error: " + ex.Message);
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
-            private void Button_Click_1(object sender, RoutedEventArgs e)
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             admindjalla.Visibility = Visibility.Visible;
             homescreen.Visibility = Visibility.Hidden;
@@ -268,7 +293,7 @@ namespace Geld_Automaat
                 return;
             }
 
-            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -280,12 +305,15 @@ namespace Geld_Automaat
                     {
                         try
                         {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 100 WHERE `rekeningen`.`rekeningnummer` = '{enteredRekeningnummer}'";
+                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 100 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
 
                             MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
                             updateSaldoCommand.ExecuteNonQuery();
+
+                            // Record the deposit transaction
+                            // Uncomment and modify the transaction insertion code as needed
 
                             // Record the deposit transaction
                             //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, @Tijd, 2, 100)";
@@ -332,6 +360,7 @@ namespace Geld_Automaat
 
 
 
+
         //200 euro storten button
         private void Button_StortGeld200(object sender, RoutedEventArgs e)
         {
@@ -342,7 +371,7 @@ namespace Geld_Automaat
                 return;
             }
 
-            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -354,7 +383,7 @@ namespace Geld_Automaat
                     {
                         try
                         {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 200 WHERE `rekeningen`.`rekeningnummer` = '{enteredRekeningnummer}'";
+                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 200 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
 
                             MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
@@ -398,6 +427,7 @@ namespace Geld_Automaat
         }
 
 
+
         //500 euro storten button
         private void Button_StortGeld500(object sender, RoutedEventArgs e)
         {
@@ -408,7 +438,7 @@ namespace Geld_Automaat
                 return;
             }
 
-            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -420,7 +450,7 @@ namespace Geld_Automaat
                     {
                         try
                         {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 500 WHERE `rekeningen`.`rekeningnummer` = '{enteredRekeningnummer}'";
+                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 500 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
 
                             MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
@@ -462,6 +492,7 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
+
 
         //Gebruiker saldo updaten
         private void UpdateUserSaldo(string rekeningnummer)
