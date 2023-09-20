@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -84,6 +85,25 @@ namespace Geld_Automaat
             if (PincodeTextBox.Text.Length < 4)
             {
                 PincodeTextBox.Text += number;
+            }
+        }
+
+
+        //Hash ding 
+        public static string EncryptString(string rawData)
+        {  // Create a SHA256
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // ComputeHash - returns byte array
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+                // Convert byte array to a string
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
             }
         }
 
@@ -235,11 +255,21 @@ namespace Geld_Automaat
 
 
         //100 euro storten button
+        // Define a class-level variable to keep track of the deposit count
+        private int depositCount = 0;
+
         private void Button_StortGeld100(object sender, RoutedEventArgs e)
         {
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; 
+            // Check if the user has already made three deposits
+            if (depositCount >= 3)
+            {
+                MessageBox.Show("You have reached the maximum number of allowed deposits (3 times).");
+                return;
+            }
 
-            myDBconnection dbConnection = new myDBconnection(); 
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+
+            myDBconnection dbConnection = new myDBconnection();
 
             try
             {
@@ -251,17 +281,13 @@ namespace Geld_Automaat
                         {
                             string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 100 WHERE `rekeningen`.`rekeningnummer` = '{enteredRekeningnummer}'";
 
-                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);                            
+                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                          // Record the deposit transaction
-                          //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, @Tijd, 2, 100)";
-                          //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                          //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                          //  insertTransactionCommand.ExecuteNonQuery();
+                            // Increment the deposit count
+                            depositCount++;
 
                             // Commit the transaction
                             transaction.Commit();
@@ -297,9 +323,17 @@ namespace Geld_Automaat
         }
 
 
+
         //200 euro storten button
         private void Button_StortGeld200(object sender, RoutedEventArgs e)
         {
+            // Check if the user has already made three deposits
+            if (depositCount >= 3)
+            {
+                MessageBox.Show("You have reached the maximum number of allowed deposits (3 times).");
+                return;
+            }
+
             string enteredRekeningnummer = RekeningnummerTextBox.Text;
 
             myDBconnection dbConnection = new myDBconnection();
@@ -318,6 +352,9 @@ namespace Geld_Automaat
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
                             updateSaldoCommand.ExecuteNonQuery();
+
+                            // Increment the deposit count
+                            depositCount++;
 
                             // Commit the transaction
                             transaction.Commit();
@@ -356,6 +393,13 @@ namespace Geld_Automaat
         //500 euro storten button
         private void Button_StortGeld500(object sender, RoutedEventArgs e)
         {
+            // Check if the user has already made three deposits
+            if (depositCount >= 3)
+            {
+                MessageBox.Show("You have reached the maximum number of allowed deposits (3 times).");
+                return;
+            }
+
             string enteredRekeningnummer = RekeningnummerTextBox.Text;
 
             myDBconnection dbConnection = new myDBconnection();
@@ -374,6 +418,9 @@ namespace Geld_Automaat
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
                             updateSaldoCommand.ExecuteNonQuery();
+
+                            // Increment the deposit count
+                            depositCount++;
 
                             // Commit the transaction
                             transaction.Commit();
