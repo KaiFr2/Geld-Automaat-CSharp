@@ -10,18 +10,18 @@
         <Grid x:Name="homescreen" Visibility="Visible">
             <TextBox x:Name="RekeningnummerTextBox" HorizontalAlignment="Left" Margin="400,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
             <TextBox x:Name="PincodeTextBox" HorizontalAlignment="Left" Margin="400,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
-            <Button Content="1" Width="50" Height="50" HorizontalAlignment="Left" Margin="298,126,0,0" VerticalAlignment="Top" Click="Button_Click_num1"/>
+            <Button Content="1" Width="50" Height="50" HorizontalAlignment="Left" Margin="329,126,0,0" VerticalAlignment="Top" Click="Button_Click_num1"/>
             <Button Content="2" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click_num2" Margin="379,126,0,0"/>
-            <Button Content="3" Width="50" Height="50" HorizontalAlignment="Left" Margin="464,126,0,0" VerticalAlignment="Top" Click="Button_Click_num3"/>
-            <Button Content="4" Width="50" Height="50" HorizontalAlignment="Left" Margin="298,0,0,0" VerticalAlignment="Center" Click="Button_Click_num4"/>
-            <Button Content="5" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,0,0,0" VerticalAlignment="Center" Click="Button_Click_num5"/>
-            <Button Content="6" Width="50" Height="50" HorizontalAlignment="Left" Margin="464,0,0,0" VerticalAlignment="Center" Click="Button_Click_num6" RenderTransformOrigin="1.054,0.199"/>
-            <Button Content="7" Width="50" Height="50" HorizontalAlignment="Left" Margin="298,259,0,0" VerticalAlignment="Top" Click="Button_Click_num7"/>
-            <Button Content="8" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,259,0,0" VerticalAlignment="Top" Click="Button_Click_num8"/>
-            <Button Content="9" Width="50" Height="50" HorizontalAlignment="Left" Margin="464,259,0,0" VerticalAlignment="Top" Click="Button_Click_num9"/>
-            <Button Content="0" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,338,0,0" VerticalAlignment="Top" Click="Button_Click_num0"/>
-            <Button Content="Enter" Width="51" Height="50" HorizontalAlignment="Left" Margin="464,338,0,0" VerticalAlignment="Top" Click="Button_Click_enter"/>
-            <Button Content="Delete" Width="50" Height="50" HorizontalAlignment="Left" Margin="298,338,0,0" VerticalAlignment="Top" Click="Button_Click_delete"/>
+            <Button Content="3" Width="50" Height="50" HorizontalAlignment="Left" Margin="429,126,0,0" VerticalAlignment="Top" Click="Button_Click_num3"/>
+            <Button Content="4" Width="50" Height="50" HorizontalAlignment="Left" Margin="329,176,0,0" VerticalAlignment="Top" Click="Button_Click_num4"/>
+            <Button Content="5" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,176,0,0" VerticalAlignment="Top" Click="Button_Click_num5"/>
+            <Button Content="6" Width="50" Height="50" HorizontalAlignment="Left" Margin="429,176,0,0" VerticalAlignment="Top" Click="Button_Click_num6" RenderTransformOrigin="1.054,0.199"/>
+            <Button Content="7" Width="50" Height="50" HorizontalAlignment="Left" Margin="329,226,0,0" VerticalAlignment="Top" Click="Button_Click_num7"/>
+            <Button Content="8" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,226,0,0" VerticalAlignment="Top" Click="Button_Click_num8"/>
+            <Button Content="9" Width="50" Height="50" HorizontalAlignment="Left" Margin="429,226,0,0" VerticalAlignment="Top" Click="Button_Click_num9"/>
+            <Button Content="0" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,276,0,0" VerticalAlignment="Top" Click="Button_Click_num0"/>
+            <Button Content="Enter" Width="51" Height="50" HorizontalAlignment="Left" Margin="429,276,0,0" VerticalAlignment="Top" Click="Button_Click_enter"/>
+            <Button Content="Delete" Width="50" Height="50" HorizontalAlignment="Left" Margin="329,276,0,0" VerticalAlignment="Top" Click="Button_Click_delete"/>
             <Button Content="Admin" HorizontalAlignment="Left" Margin="718,49,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
         </Grid>
         <Grid x:Name="options" Visibility="Hidden">
@@ -31,10 +31,10 @@
             <Label x:Name="SaldoLabel" Content="Je saldo is" HorizontalAlignment="Center" Margin="0,89,0,0" VerticalAlignment="Top"/>
         </Grid>
         <Grid x:Name="storten" Visibility="Hidden">
-            <Label x:Name="Saldo2" Content="Je saldo is:" HorizontalAlignment="Left" Margin="378,78,0,0" VerticalAlignment="Top"/>
-            <Button Content="100" HorizontalAlignment="Center" Margin="0,179,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_StortGeld100"/>
-            <Button Content="200" HorizontalAlignment="Left" Margin="132,0,0,0" VerticalAlignment="Center" Height="66" Width="128" Click="Button_StortGeld200"/>
-            <Button Content="500" HorizontalAlignment="Left" Margin="532,0,0,0" VerticalAlignment="Center" Height="66" Width="128" Click="Button_StortGeld500"/>
+            <Label x:Name="Saldo2" Content="Je saldo is:" HorizontalAlignment="Left" Margin="372,78,0,0" VerticalAlignment="Top"/>
+            <Button Content="100" HorizontalAlignment="Left" Margin="140,181,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_StortGeld100"/>
+            <Button Content="200" HorizontalAlignment="Left" Margin="340,181,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_StortGeld200"/>
+            <Button Content="500" HorizontalAlignment="Left" Margin="532,180,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_StortGeld500"/>
         </Grid>
         <Grid x:Name="admindjalla" Visibility="Hidden">
             <TextBox x:Name="gebruikernaam" HorizontalAlignment="Center" Margin="0,146,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>

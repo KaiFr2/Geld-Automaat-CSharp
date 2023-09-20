@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -285,6 +286,13 @@ namespace Geld_Automaat
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
                             updateSaldoCommand.ExecuteNonQuery();
+
+                            // Record the deposit transaction
+                            //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, @Tijd, 2, 100)";
+                            //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                            //  insertTransactionCommand.ExecuteNonQuery();
 
                             // Increment the deposit count
                             depositCount++;
