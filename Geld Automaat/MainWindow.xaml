@@ -25,16 +25,24 @@
             <Button Content="Admin" HorizontalAlignment="Left" Margin="718,49,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
         </Grid>
         <Grid x:Name="options" Visibility="Hidden">
-            <Button Content="Opnemen" HorizontalAlignment="Center" Margin="0,328,0,0" VerticalAlignment="Top" Click="Button_Click" Height="51" Width="110"/>
+            <Button Content="Opnemen" HorizontalAlignment="Center" Margin="0,328,0,0" VerticalAlignment="Top" Height="51" Width="110" Click="Button_Opnemenknop"/>
             <Button Content="Storten" HorizontalAlignment="Center" Margin="0,247,0,0" VerticalAlignment="Top" Height="57" Width="108" Click="Button_Storten"/>
             <Label x:Name="WelcomeLabel" Content="Welkom" HorizontalAlignment="Center" Margin="0,41,0,0" VerticalAlignment="Top"/>
             <Label x:Name="SaldoLabel" Content="Je saldo is" HorizontalAlignment="Center" Margin="0,89,0,0" VerticalAlignment="Top"/>
         </Grid>
-        <Grid x:Name="storten" Visibility="Hidden">
+        <Grid x:Name="Opnemen" Visibility="Hidden">
             <Label x:Name="Saldo2" Content="Je saldo is:" HorizontalAlignment="Left" Margin="372,78,0,0" VerticalAlignment="Top"/>
+            <Button Content="100" HorizontalAlignment="Left" Margin="140,181,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_Opnemen100"/>
+            <Button Content="200" HorizontalAlignment="Left" Margin="340,181,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_Opnemen200"/>
+            <Button Content="500" HorizontalAlignment="Left" Margin="532,180,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_Opnemen500"/>
+            <Button Content="Terug" HorizontalAlignment="Left" Margin="340,308,0,0" VerticalAlignment="Top" Height="60" Width="130" Click="Button_Terug2"/>
+        </Grid>
+        <Grid x:Name="storten" Visibility="Hidden">
+            <Label x:Name="Saldo3" Content="Je saldo is:" HorizontalAlignment="Left" Margin="372,78,0,0" VerticalAlignment="Top"/>
             <Button Content="100" HorizontalAlignment="Left" Margin="140,181,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_StortGeld100"/>
             <Button Content="200" HorizontalAlignment="Left" Margin="340,181,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_StortGeld200"/>
             <Button Content="500" HorizontalAlignment="Left" Margin="532,180,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="Button_StortGeld500"/>
+            <Button Content="Terug" HorizontalAlignment="Left" Margin="340,308,0,0" VerticalAlignment="Top" Height="60" Width="130" Click="Button_Terug"/>
         </Grid>
         <Grid x:Name="admindjalla" Visibility="Hidden">
             <TextBox x:Name="gebruikernaam" HorizontalAlignment="Center" Margin="0,146,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
