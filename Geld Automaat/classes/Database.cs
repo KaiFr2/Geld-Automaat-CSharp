@@ -16,7 +16,7 @@ namespace Geld_Automaat.classes
         public myDBconnection()
         {
             // Define the connection string
-            string connectionString = "Server=localhost;Uid=root;Pwd=;Database=mydb";
+            string connectionString = "Server=localhost;Uid=root;Pwd=;Database=geldautomaat";
 
             // Initialize the MySqlConnection object
             connection = new MySqlConnection(connectionString);

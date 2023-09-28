@@ -358,11 +358,11 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                          //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
-                          //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                          //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
+                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                           // insertTransactionCommand.ExecuteNonQuery();
+                            insertTransactionCommand.ExecuteNonQuery();
 
                             transaction.Commit();
 
@@ -421,11 +421,11 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
-                            //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 200)";
+                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                            // insertTransactionCommand.ExecuteNonQuery();
+                            insertTransactionCommand.ExecuteNonQuery();
 
                             transaction.Commit();
 
@@ -482,11 +482,11 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
-                            //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 500)";
+                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                            // insertTransactionCommand.ExecuteNonQuery();
+                            insertTransactionCommand.ExecuteNonQuery();
 
                             transaction.Commit();
 
@@ -522,7 +522,7 @@ namespace Geld_Automaat
             // Check if the user has already made three deposits
             if (OpnemenCount >= 3)
             {
-                MessageBox.Show("You have reached the maximum number of allowed deposits (3 times).");
+                MessageBox.Show("You have reached the maximum amount of withdrawing for the day (3 times).");
                 return;
             }
 
@@ -545,11 +545,11 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                         //   string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
-                          //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                         //   insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 1, 100)";
+                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                         //   insertTransactionCommand.ExecuteNonQuery();
+                            insertTransactionCommand.ExecuteNonQuery();
 
                             OpnemenCount++;
 
@@ -591,7 +591,7 @@ namespace Geld_Automaat
             // Check if the user has already made three deposits
             if (OpnemenCount >= 3)
             {
-                MessageBox.Show("You have reached the maximum number of allowed deposits (3 times).");
+                MessageBox.Show("You have reached the maximum amount of withdrawing for the day (3 times).");
                 return;
             }
 
@@ -614,11 +614,11 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                          //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 200)";
-                          //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                          //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 1, 200)";
+                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                          //  insertTransactionCommand.ExecuteNonQuery();
+                            insertTransactionCommand.ExecuteNonQuery();
 
                             OpnemenCount++;
 
@@ -658,7 +658,7 @@ namespace Geld_Automaat
             // Check if the user has already made three deposits
             if (OpnemenCount >= 3)
             {
-                MessageBox.Show("You have reached the maximum number of allowed deposits (3 times).");
+                MessageBox.Show("You have reached the maximum amount of withdrawing for the day (3 times).");
                 return;
             }
 
@@ -681,11 +681,11 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                         //   string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
-                         //   MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                         //   insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 1, 500)";
+                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                         //   insertTransactionCommand.ExecuteNonQuery();
+                            insertTransactionCommand.ExecuteNonQuery();
 
                             OpnemenCount++;
 
@@ -798,21 +798,18 @@ namespace Geld_Automaat
 
 
 
+
         private void Button_Terug(object sender, RoutedEventArgs e)
         {
             storten.Visibility = Visibility.Hidden;
             options.Visibility = Visibility.Visible;
 
-            // Refresh the saldo label when navigating back
         }
 
         private void Button_Terug2(object sender, RoutedEventArgs e)
         {
             Opnemen.Visibility = Visibility.Hidden;
             options.Visibility = Visibility.Visible;
-
-            // Refresh the saldo label when navigating back
-            UpdateSaldoMin(enteredRekeningnummer);
         }
     }
 }
