@@ -147,7 +147,7 @@ namespace Geld_Automaat
 
                                 // Display a message without showing the original rekeningnummer
                                 WelcomeLabel.Content = "Welcome to the ATM!";
-                                SaldoLabel.Content = "Your saldo: " + saldo;
+                                SaldoLabel.Content = "Je saldo is " + saldo;
                             }
                             else
                             {
@@ -737,11 +737,8 @@ namespace Geld_Automaat
                         {
                             int saldo = reader.GetInt32("saldo");
 
-                            // Determine whether to add a plus sign based on the saldo
-                            string saldoText = saldo >= 0 ? "+" + saldo : saldo.ToString();
-
                             // Update the UI element with the current balance
-                            Saldo3.Content = "Saldo: " + saldoText + " euros";
+                            Saldo3.Content = "Je saldo is " + saldo;
                         }
                     }
                 }
@@ -756,6 +753,7 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred while updating saldo. Please try again later.");
             }
         }
+
 
 
         private void UpdateSaldoMin(string rekeningnummer)
@@ -780,7 +778,7 @@ namespace Geld_Automaat
                             string saldoText = saldo < 0 ? "-" + Math.Abs(saldo) : saldo.ToString();
 
                             // Update the UI element with the current balance
-                            Saldo2.Content = "Saldo: " + saldoText + " euros";
+                            Saldo2.Content = "Je saldo is " + saldo;
                         }
                     }
                 }
@@ -801,15 +799,122 @@ namespace Geld_Automaat
 
         private void Button_Terug(object sender, RoutedEventArgs e)
         {
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+
             storten.Visibility = Visibility.Hidden;
             options.Visibility = Visibility.Visible;
+            myDBconnection dbConnection = new myDBconnection();
 
-        }
+            try
+            {
+                if (dbConnection.Connect())
+                {
+                    string sql = "SELECT saldo FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
 
+                    MySqlCommand command = new MySqlCommand(sql, dbConnection.connection);
+                    command.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int saldo = Convert.ToInt32(reader["saldo"]);
+                            SaldoLabel.Content = "Je saldo is " + saldo;
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Database connection failed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("An error occurred. Please try again later.");
+            }
+        }        
         private void Button_Terug2(object sender, RoutedEventArgs e)
         {
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+
             Opnemen.Visibility = Visibility.Hidden;
             options.Visibility = Visibility.Visible;
+            myDBconnection dbConnection = new myDBconnection();
+
+            try
+            {
+                if (dbConnection.Connect())
+                {
+                    string sql = "SELECT saldo FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
+
+                    MySqlCommand command = new MySqlCommand(sql, dbConnection.connection);
+                    command.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int saldo = Convert.ToInt32(reader["saldo"]);
+                            SaldoLabel.Content = "Je saldo is " + saldo;
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Database connection failed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("An error occurred. Please try again later.");
+            }
+        }
+        public void Button_Transactie(object sender, RoutedEventArgs e)
+        {
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+
+            options.Visibility = Visibility.Hidden;
+            Transactie.Visibility = Visibility.Visible;
+
+            myDBconnection dbConnection = new myDBconnection();
+            try
+            {
+                if (dbConnection.Connect())
+                {
+                    string sql = "SELECT tijd, hoeveel, type FROM transacties WHERE Rekeningen_rekeningnummer = @Rekeningnummer ORDER BY `tijd` DESC LIMIT 3";
+
+                    MySqlCommand command = new MySqlCommand(sql, dbConnection.connection);
+                    command.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                    List<Transaction> transactions = new List<Transaction>();
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DateTime time = reader.GetDateTime("tijd");
+                            decimal amount = reader.GetDecimal("hoeveel");
+                            int type = reader.GetInt32("type");
+
+                            transactions.Add(new Transaction { Time = time, Amount = amount, Type = type });
+                        }
+                    }
+
+                    // Bind the transactions to the ListBox
+                    TransactionListBox.ItemsSource = transactions;
+                }
+                else
+                {
+                    MessageBox.Show("Database connection failed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("An error occurred. Please try again later.");
+            }
         }
     }
 }

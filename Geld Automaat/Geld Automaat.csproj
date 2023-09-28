@@ -116,6 +116,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="classes\Database.cs" />
+    <Compile Include="classes\Transaction.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
