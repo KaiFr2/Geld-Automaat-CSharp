@@ -25,7 +25,7 @@ namespace Geld_Automaat
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        public string enteredRekeningnummer;
         public MainWindow()
         {
             InitializeComponent();
@@ -111,8 +111,11 @@ namespace Geld_Automaat
         //Button enter
         private void Button_Click_enter(object sender, RoutedEventArgs e)
         {
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text);
-            string enteredPincode = EncryptString(PincodeTextBox.Text);
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+            string enteredPincode = PincodeTextBox.Text; // Leave the pincode as is
+
+            // Hash the pincode with SHA-256
+            string hashedPincode = EncryptString(enteredPincode);
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -129,11 +132,11 @@ namespace Geld_Automaat
                     {
                         if (reader.Read())
                         {
-                            // Retrieve the encrypted rekeningnummer from the database
+                            // Retrieve the encrypted rekeningnummer and stored pincode from the database
                             string storedRekeningnummer = reader["Rekeningnummer"].ToString();
                             string storedPincode = reader["Pincode"].ToString();
 
-                            if (enteredRekeningnummer == storedRekeningnummer && enteredPincode == storedPincode)
+                            if (enteredRekeningnummer == storedRekeningnummer && hashedPincode == storedPincode)
                             {
                                 int saldo = Convert.ToInt32(reader["saldo"]);
 
@@ -171,6 +174,7 @@ namespace Geld_Automaat
 
 
 
+
         //Delete knop
         private void Button_Click_delete(object sender, RoutedEventArgs e)
         {
@@ -189,10 +193,10 @@ namespace Geld_Automaat
         //Admin login button
         private void Button_Admin_login(object sender, RoutedEventArgs e)
         {
-            string enteredUsername = gebruikernaam.Text; 
-            string enteredPassword = password.Password; 
+            string enteredUsername = gebruikernaam.Text;
+            string enteredPassword = password.Password;
 
-            myDBconnection dbConnection = new myDBconnection(); 
+            myDBconnection dbConnection = new myDBconnection();
 
             try
             {
@@ -233,7 +237,7 @@ namespace Geld_Automaat
             options.Visibility = Visibility.Hidden;
             storten.Visibility = Visibility.Visible;
 
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -273,12 +277,13 @@ namespace Geld_Automaat
             }
         }
 
+
         private void Button_Opnemenknop(object sender, RoutedEventArgs e)
         {
             options.Visibility = Visibility.Hidden;
             Opnemen.Visibility = Visibility.Visible;
 
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -318,6 +323,7 @@ namespace Geld_Automaat
             }
         }
 
+
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             admindjalla.Visibility = Visibility.Visible;
@@ -333,7 +339,7 @@ namespace Geld_Automaat
         {
             // Check if the user has already made three deposits
 
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -352,30 +358,20 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            // Record the deposit transaction
-                            // Uncomment and modify the transaction insertion code as needed
+                          //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
+                          //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                          //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                            // Record the deposit transaction
-                            //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, @Tijd, 2, 100)";
-                            //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                           // insertTransactionCommand.ExecuteNonQuery();
 
-                            //  insertTransactionCommand.ExecuteNonQuery();
-
-                            // Increment the deposit count
-
-                            // Commit the transaction
                             transaction.Commit();
 
-                            // Show a success message
                             MessageBox.Show("Deposit successful. 100 euros added to your account.");
 
-                            // Update the user's saldo label
                             UpdateSaldoPlus(enteredRekeningnummer);
                         }
                         catch (Exception ex)
                         {
-                            // Something went wrong, rollback the transaction
                             transaction.Rollback();
 
                             Console.WriteLine("Error: " + ex.Message);
@@ -400,12 +396,13 @@ namespace Geld_Automaat
 
 
 
+
         //200 euro storten button
         private void Button_StortGeld200(object sender, RoutedEventArgs e)
         {
             // Check if the user has already made three deposits
-            
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -424,20 +421,20 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            // Increment the deposit count
+                            //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
+                            //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                            // Commit the transaction
+                            // insertTransactionCommand.ExecuteNonQuery();
+
                             transaction.Commit();
 
-                            // Show a success message
                             MessageBox.Show("Deposit successful. 200 euros added to your account.");
 
-                            // Update the user's saldo label
                             UpdateSaldoPlus(enteredRekeningnummer);
                         }
                         catch (Exception ex)
                         {
-                            // Something went wrong, rollback the transaction
                             transaction.Rollback();
 
                             Console.WriteLine("Error: " + ex.Message);
@@ -465,8 +462,8 @@ namespace Geld_Automaat
         private void Button_StortGeld500(object sender, RoutedEventArgs e)
         {
             // Check if the user has already made three deposits
-           
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -485,18 +482,20 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            // Commit the transaction
+                            //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
+                            //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                            // insertTransactionCommand.ExecuteNonQuery();
+
                             transaction.Commit();
 
-                            // Show a success message
                             MessageBox.Show("Deposit successful. 500 euros added to your account.");
 
-                            // Update the user's saldo label
                             UpdateSaldoPlus(enteredRekeningnummer);
                         }
                         catch (Exception ex)
                         {
-                            // Something went wrong, rollback the transaction
                             transaction.Rollback();
 
                             Console.WriteLine("Error: " + ex.Message);
@@ -527,7 +526,7 @@ namespace Geld_Automaat
                 return;
             }
 
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -546,31 +545,21 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            // Record the deposit transaction
-                            // Uncomment and modify the transaction insertion code as needed
+                         //   string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
+                          //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                         //   insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                            // Record the deposit transaction
-                            //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, @Tijd, 2, 100)";
-                            //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                         //   insertTransactionCommand.ExecuteNonQuery();
 
-                            //  insertTransactionCommand.ExecuteNonQuery();
-
-                            // Increment the deposit count
                             OpnemenCount++;
 
-                            // Commit the transaction
                             transaction.Commit();
+                            MessageBox.Show("Deposit successful. 100 euros added to your account.");
 
-                            // Show a success message
-                            MessageBox.Show("nfkasnfk.");
-
-                            // Update the user's saldo label
                             UpdateSaldoMin(enteredRekeningnummer);
                         }
                         catch (Exception ex)
                         {
-                            // Something went wrong, rollback the transaction
                             transaction.Rollback();
 
                             Console.WriteLine("Error: " + ex.Message);
@@ -595,6 +584,7 @@ namespace Geld_Automaat
 
 
 
+
         //200 euro storten button
         private void Button_Opnemen200(object sender, RoutedEventArgs e)
         {
@@ -605,7 +595,7 @@ namespace Geld_Automaat
                 return;
             }
 
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -624,21 +614,21 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            // Increment the deposit count
+                          //  string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 200)";
+                          //  MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                          //  insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                          //  insertTransactionCommand.ExecuteNonQuery();
+
                             OpnemenCount++;
 
-                            // Commit the transaction
                             transaction.Commit();
+                            MessageBox.Show("Deposit successful. 100 euros added to your account.");
 
-                            // Show a success message
-                            MessageBox.Show("RAHHH.");
-
-                            // Update the user's saldo label
                             UpdateSaldoMin(enteredRekeningnummer);
                         }
                         catch (Exception ex)
                         {
-                            // Something went wrong, rollback the transaction
                             transaction.Rollback();
 
                             Console.WriteLine("Error: " + ex.Message);
@@ -668,11 +658,11 @@ namespace Geld_Automaat
             // Check if the user has already made three deposits
             if (OpnemenCount >= 3)
             {
-                MessageBox.Show("Je mag maximaal 3x opnemen per dag.");
+                MessageBox.Show("You have reached the maximum number of allowed deposits (3 times).");
                 return;
             }
 
-            string enteredRekeningnummer = EncryptString(RekeningnummerTextBox.Text); // Encrypt the input
+            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
             myDBconnection dbConnection = new myDBconnection();
 
@@ -691,21 +681,21 @@ namespace Geld_Automaat
 
                             updateSaldoCommand.ExecuteNonQuery();
 
-                            // Increment the deposit count
+                         //   string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
+                         //   MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                         //   insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+
+                         //   insertTransactionCommand.ExecuteNonQuery();
+
                             OpnemenCount++;
 
-                            // Commit the transaction
                             transaction.Commit();
+                            MessageBox.Show("Deposit successful. 500 euros added to your account.");
 
-                            // Show a success message
-                            MessageBox.Show("Suei.");
-
-                            // Update the user's saldo label
                             UpdateSaldoMin(enteredRekeningnummer);
                         }
                         catch (Exception ex)
                         {
-                            // Something went wrong, rollback the transaction
                             transaction.Rollback();
 
                             Console.WriteLine("Error: " + ex.Message);
@@ -812,11 +802,17 @@ namespace Geld_Automaat
         {
             storten.Visibility = Visibility.Hidden;
             options.Visibility = Visibility.Visible;
+
+            // Refresh the saldo label when navigating back
         }
+
         private void Button_Terug2(object sender, RoutedEventArgs e)
         {
             Opnemen.Visibility = Visibility.Hidden;
             options.Visibility = Visibility.Visible;
+
+            // Refresh the saldo label when navigating back
+            UpdateSaldoMin(enteredRekeningnummer);
         }
     }
 }
