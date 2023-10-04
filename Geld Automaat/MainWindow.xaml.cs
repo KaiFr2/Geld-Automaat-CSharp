@@ -212,6 +212,8 @@ namespace Geld_Automaat
                         if (reader.Read())
                         {
                             MessageBox.Show("Admin Login Successful. Welcome!");
+                            admindjalla.Visibility = Visibility.Hidden;
+                            admindjalla2.Visibility = Visibility.Visible;
                         }
                         else
                         {
@@ -277,7 +279,6 @@ namespace Geld_Automaat
             }
         }
 
-
         private void Button_Opnemenknop(object sender, RoutedEventArgs e)
         {
             options.Visibility = Visibility.Hidden;
@@ -322,7 +323,6 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
-
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -393,10 +393,6 @@ namespace Geld_Automaat
             }
         }
 
-
-
-
-
         //200 euro storten button
         private void Button_StortGeld200(object sender, RoutedEventArgs e)
         {
@@ -455,8 +451,6 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
-
-
 
         //500 euro storten button
         private void Button_StortGeld500(object sender, RoutedEventArgs e)
@@ -581,10 +575,6 @@ namespace Geld_Automaat
             }
         }
 
-
-
-
-
         //200 euro storten button
         private void Button_Opnemen200(object sender, RoutedEventArgs e)
         {
@@ -649,8 +639,6 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
-
-
 
         //500 euro storten button
         private void Button_Opnemen500(object sender, RoutedEventArgs e)
@@ -754,8 +742,6 @@ namespace Geld_Automaat
             }
         }
 
-
-
         private void UpdateSaldoMin(string rekeningnummer)
         {
             myDBconnection dbConnection = new myDBconnection();
@@ -793,9 +779,6 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred while updating saldo. Please try again later.");
             }
         }
-
-
-
 
         private void Button_Terug(object sender, RoutedEventArgs e)
         {
@@ -916,6 +899,108 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            admindjalla2.Visibility = Visibility.Hidden;
+            saldoaanpassen.Visibility = Visibility.Visible;
+        }
+        private void AddSaldo(string rekeningnummer, decimal amount)
+        {
+            myDBconnection dbConnection = new myDBconnection();
+
+            try
+            {
+                if (dbConnection.Connect())
+                {
+                    // Update saldo in the database
+                    string updateSql = "UPDATE Rekeningen SET saldo = saldo + @Amount WHERE rekeningnummer = @Rekeningnummer";
+                    MySqlCommand updateCommand = new MySqlCommand(updateSql, dbConnection.connection);
+                    updateCommand.Parameters.AddWithValue("@Amount", amount);
+                    updateCommand.Parameters.AddWithValue("@Rekeningnummer", rekeningnummer);
+                    int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Saldo added successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to add saldo. Please check the rekeningnummer.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Database connection failed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("An error occurred while adding saldo. Please try again later.");
+            }
+        }
+        private void SubtractSaldo(string rekeningnummer, decimal amount)
+        {
+            myDBconnection dbConnection = new myDBconnection();
+
+            try
+            {
+                if (dbConnection.Connect())
+                {
+                    // Update saldo in the database
+                    string updateSql = "UPDATE Rekeningen SET saldo = saldo - @Amount WHERE rekeningnummer = @Rekeningnummer";
+                    MySqlCommand updateCommand = new MySqlCommand(updateSql, dbConnection.connection);
+                    updateCommand.Parameters.AddWithValue("@Amount", amount);
+                    updateCommand.Parameters.AddWithValue("@Rekeningnummer", rekeningnummer);
+                    int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Saldo subtracted successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to subtract saldo. Please check the rekeningnummer or available saldo.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Database connection failed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("An error occurred while subtracting saldo. Please try again later.");
+            }
+        }
+        private void Button_SaldoErbij(object sender, RoutedEventArgs e)
+        {
+            string rekeningnummer = banknummer.Text;
+            if (!string.IsNullOrEmpty(rekeningnummer) && decimal.TryParse(saldonummer.Text, out decimal amount))
+            {
+                AddSaldo(rekeningnummer, amount);
+            }
+            else
+            {
+                MessageBox.Show("Invalid rekeningnummer or amount.");
+            }
+        }
+
+        private void Button_SaldoEraf(object sender, RoutedEventArgs e)
+        {
+            string rekeningnummer = banknummer.Text;
+            if (!string.IsNullOrEmpty(rekeningnummer) && decimal.TryParse(saldonummer.Text, out decimal amount))
+            {
+                SubtractSaldo(rekeningnummer, amount);
+            }
+            else
+            {
+                MessageBox.Show("Invalid rekeningnummer or amount.");
+            }
+        }
+
     }
 }
 
