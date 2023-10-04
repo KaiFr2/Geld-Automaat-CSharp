@@ -65,7 +65,7 @@
         </Grid>
         <Grid x:Name="admindjalla2" Visibility="Visible">
             <Button Content="Saldo aanpassen" HorizontalAlignment="Center" Margin="0,150,0,0" VerticalAlignment="Top" Click="Button_Click_2"/>
-            <Button Content="Rekening toevoegen" HorizontalAlignment="Center" Margin="0,197,0,0" VerticalAlignment="Top"/>
+            <Button Content="Rekening toevoegen" HorizontalAlignment="Center" Margin="0,197,0,0" VerticalAlignment="Top" Click="Button_Click_3"/>
             <Button Content="Rekening verwijderen" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top"/>
         </Grid>
         <Grid x:Name="saldoaanpassen" Visibility="Hidden">
@@ -73,6 +73,14 @@
             <TextBox x:Name="saldonummer" HorizontalAlignment="Center" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="120"/>
             <Button Content="Saldo erbij" HorizontalAlignment="Left" Margin="228,274,0,0" VerticalAlignment="Top" Height="52" Width="115" Click="Button_SaldoErbij"/>
             <Button Content="Saldo eraf" HorizontalAlignment="Left" Margin="456,274,0,0" VerticalAlignment="Top" Height="52" Width="115" Click="Button_SaldoEraf"/>
+        </Grid>
+        <Grid x:Name="rekeningtoevoegen" Visibility="Hidden">
+            <TextBox x:Name="rekeningcreate" HorizontalAlignment="Left" Margin="338,148,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="pincodecreate"  HorizontalAlignment="Left" Margin="338,198,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <Button Content="Maak rekening aan" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top" Click="Button_Maakrekening"/>
+        </Grid>
+        <Grid x:Name="rekeningverwijder" Visibility="Hidden">
+            
         </Grid>
     </Grid>
 </Window>

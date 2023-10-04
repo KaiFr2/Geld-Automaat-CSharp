@@ -1001,6 +1001,78 @@ namespace Geld_Automaat
             }
         }
 
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            admindjalla2.Visibility = Visibility.Hidden;
+            rekeningtoevoegen.Visibility = Visibility.Visible;
+        }
+        private void Button_Maakrekening(object sender, RoutedEventArgs e)
+        {
+            string enteredRekeningnummer = rekeningcreate.Text;
+            string enteredPincode = pincodecreate.Text;
+
+            if (!string.IsNullOrEmpty(enteredRekeningnummer) && !string.IsNullOrEmpty(enteredPincode))
+            {
+                try
+                {
+                    // Hash the pincode using SHA-256
+                    string hashedPincode = EncryptString(enteredPincode);
+
+                    myDBconnection dbConnection = new myDBconnection();
+
+                    if (dbConnection.Connect())
+                    {
+                        // Check if the rekeningnummer already exists in the database
+                        string checkSql = "SELECT COUNT(*) FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
+                        MySqlCommand checkCommand = new MySqlCommand(checkSql, dbConnection.connection);
+                        checkCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                        long existingAccounts = (long)checkCommand.ExecuteScalar();
+
+                        if (existingAccounts == 0)
+                        {
+                            // Insert the rekeningnummer and hashed pincode into the database
+                            string insertSql = "INSERT INTO Rekeningen (Rekeningnummer, Pincode) VALUES (@Rekeningnummer, @Pincode)";
+                            MySqlCommand insertCommand = new MySqlCommand(insertSql, dbConnection.connection);
+                            insertCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            insertCommand.Parameters.AddWithValue("@Pincode", hashedPincode);
+                            int rowsAffected = insertCommand.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                MessageBox.Show("Rekeningnummer created successfully.");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to create rekeningnummer. Please try again.");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Rekeningnummer already exists. Please choose a different one.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Database connection failed.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    MessageBox.Show("An error occurred. Please try again later.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a rekeningnummer and pincode.");
+            }
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            admindjalla2.Visibility = Visibility.Hidden;
+            rekeningverwijder.Visibility = Visibility.Visible;
+        }
     }
 }
 
