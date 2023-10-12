@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:Geld_Automaat"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#424549">
         <Grid x:Name="homescreen" Visibility="Visible">
-            <TextBox x:Name="RekeningnummerTextBox" HorizontalAlignment="Left" Margin="400,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-            <TextBox x:Name="PincodeTextBox" HorizontalAlignment="Left" Margin="400,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
+            <TextBox x:Name="RekeningnummerTextBox" HorizontalAlignment="Left" Margin="369,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" Width="70"/>
+            <TextBox x:Name="PincodeTextBox" HorizontalAlignment="Left" Margin="369,97,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" TextAlignment="Center" Width="70"/>
             <Button Content="1" Width="50" Height="50" HorizontalAlignment="Left" Margin="329,126,0,0" VerticalAlignment="Top" Click="Button_Click_num1"/>
             <Button Content="2" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click_num2" Margin="379,126,0,0"/>
             <Button Content="3" Width="50" Height="50" HorizontalAlignment="Left" Margin="429,126,0,0" VerticalAlignment="Top" Click="Button_Click_num3"/>
@@ -20,9 +20,11 @@
             <Button Content="8" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,226,0,0" VerticalAlignment="Top" Click="Button_Click_num8"/>
             <Button Content="9" Width="50" Height="50" HorizontalAlignment="Left" Margin="429,226,0,0" VerticalAlignment="Top" Click="Button_Click_num9"/>
             <Button Content="0" Width="50" Height="50" HorizontalAlignment="Left" Margin="379,276,0,0" VerticalAlignment="Top" Click="Button_Click_num0"/>
-            <Button Content="Enter" Width="51" Height="50" HorizontalAlignment="Left" Margin="429,276,0,0" VerticalAlignment="Top" Click="Button_Click_enter"/>
-            <Button Content="Delete" Width="50" Height="50" HorizontalAlignment="Left" Margin="329,276,0,0" VerticalAlignment="Top" Click="Button_Click_delete"/>
-            <Button Content="Admin" HorizontalAlignment="Left" Margin="718,49,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+            <Button Content="Enter" Width="51" Height="50" HorizontalAlignment="Left" Margin="429,276,0,0" VerticalAlignment="Top" Click="Button_Click_enter" Background="#FF2DFF00"/>
+            <Button Content="Delete" Width="50" Height="50" HorizontalAlignment="Left" Margin="329,276,0,0" VerticalAlignment="Top" Click="Button_Click_delete" Background="Red"/>
+            <Button Content="Admin" HorizontalAlignment="Left" Margin="751,10,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+            <Label Content="&#xD;&#xA;Rekeningnummer " HorizontalAlignment="Left" Margin="350,16,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Label Content="Pincode" HorizontalAlignment="Left" Margin="377,77,0,0" VerticalAlignment="Top" Foreground="White"/>
         </Grid>
         <Grid x:Name="options" Visibility="Hidden">
             <Button Content="Opnemen" HorizontalAlignment="Center" Margin="0,328,0,0" VerticalAlignment="Top" Height="51" Width="110" Click="Button_Opnemenknop"/>

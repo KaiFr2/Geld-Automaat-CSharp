@@ -318,13 +318,11 @@ namespace Geld_Automaat
             }
         }
 
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             admindjalla.Visibility = Visibility.Visible;
             homescreen.Visibility = Visibility.Hidden;
         }
-
 
         //100 euro storten button
         // Define a class-level variable to keep track of the deposit count
@@ -906,6 +904,7 @@ namespace Geld_Automaat
             admindjalla2.Visibility = Visibility.Hidden;
             saldoaanpassen.Visibility = Visibility.Visible;
         }
+
         private void AddSaldo(string rekeningnummer, decimal amount)
         {
             myDBconnection dbConnection = new myDBconnection();
@@ -941,6 +940,7 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred while adding saldo. Please try again later.");
             }
         }
+
         private void SubtractSaldo(string rekeningnummer, decimal amount)
         {
             myDBconnection dbConnection = new myDBconnection();
@@ -976,6 +976,7 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred while subtracting saldo. Please try again later.");
             }
         }
+
         private void Button_SaldoErbij(object sender, RoutedEventArgs e)
         {
             string rekeningnummer = banknummer.Text;
@@ -1007,6 +1008,7 @@ namespace Geld_Automaat
             admindjalla2.Visibility = Visibility.Hidden;
             rekeningtoevoegen.Visibility = Visibility.Visible;
         }
+
         private void Button_Maakrekening(object sender, RoutedEventArgs e)
         {
             string enteredRekeningnummer = rekeningcreate.Text;
@@ -1074,6 +1076,7 @@ namespace Geld_Automaat
             admindjalla2.Visibility = Visibility.Hidden;
             rekeningverwijder.Visibility = Visibility.Visible;
         }
+
         private void Button_Verwijderrekening(object sender, RoutedEventArgs e)
         {
             string enteredRekeningnummer = rekeningremove.Text;
@@ -1141,6 +1144,7 @@ namespace Geld_Automaat
             admindjalla2.Visibility = Visibility.Hidden;
             pincodewijzigen.Visibility = Visibility.Visible;
         }
+
         private void Button_pincodewijzig(object sender, RoutedEventArgs e)
         {
             string enteredRekeningnummer = rekeningkiezen.Text;
