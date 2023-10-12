@@ -112,7 +112,7 @@ namespace Geld_Automaat
         private void Button_Click_enter(object sender, RoutedEventArgs e)
         {
             string enteredRekeningnummer = RekeningnummerTextBox.Text;
-            string enteredPincode = PincodeTextBox.Text; // Leave the pincode as is
+            string enteredPincode = PincodeTextBox.Text;
 
             // Hash the pincode with SHA-256
             string hashedPincode = EncryptString(enteredPincode);
@@ -132,22 +132,20 @@ namespace Geld_Automaat
                     {
                         if (reader.Read())
                         {
-                            // Retrieve the encrypted rekeningnummer and stored pincode from the database
                             string storedRekeningnummer = reader["Rekeningnummer"].ToString();
                             string storedPincode = reader["Pincode"].ToString();
 
                             if (enteredRekeningnummer == storedRekeningnummer && hashedPincode == storedPincode)
                             {
-                                int saldo = Convert.ToInt32(reader["saldo"]);
+                                decimal saldo = reader.GetDecimal("saldo");
 
                                 MessageBox.Show("Login Successful. Welcome to the ATM!");
 
                                 homescreen.Visibility = Visibility.Hidden;
                                 options.Visibility = Visibility.Visible;
 
-                                // Display a message without showing the original rekeningnummer
                                 WelcomeLabel.Content = "Welcome to the ATM!";
-                                SaldoLabel.Content = "Je saldo is " + saldo;
+                                SaldoLabel.Content = "Je saldo is " + saldo.ToString("F2"); // Format as a decimal with two decimal places
                             }
                             else
                             {
@@ -171,10 +169,6 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
-
-
-
-
         //Delete knop
         private void Button_Click_delete(object sender, RoutedEventArgs e)
         {
@@ -257,10 +251,10 @@ namespace Geld_Automaat
 
                     if (result != null)
                     {
-                        // Convert the result to an integer
-                        int saldo = Convert.ToInt32(result);
+                        // Convert the result to a decimal
+                        decimal saldo = Convert.ToDecimal(result);
 
-                        Saldo3.Content = "Je saldo is: " + saldo;
+                        Saldo3.Content = "Je saldo is: " + saldo.ToString("0.00"); // Format as a decimal with two decimal places
                     }
                     else
                     {
@@ -302,10 +296,10 @@ namespace Geld_Automaat
 
                     if (result != null)
                     {
-                        // Convert the result to an integer
-                        int saldo = Convert.ToInt32(result);
+                        // Convert the result to a decimal
+                        decimal saldo = Convert.ToDecimal(result);
 
-                        Saldo2.Content = "Je saldo is: " + saldo;
+                        Saldo2.Content = "Je saldo is: " + saldo.ToString("0.00"); // Format as a decimal with two decimal places
                     }
                     else
                     {
@@ -323,6 +317,7 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
+
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -723,10 +718,10 @@ namespace Geld_Automaat
                     {
                         if (reader.Read())
                         {
-                            int saldo = reader.GetInt32("saldo");
+                            decimal saldo = reader.GetDecimal("saldo");
 
-                            // Update the UI element with the current balance
-                            Saldo3.Content = "Je saldo is " + saldo;
+                            // Update the UI element with the current balance as a decimal with two decimal places
+                            Saldo3.Content = "Je saldo is " + saldo.ToString("F2");
                         }
                     }
                 }
@@ -758,13 +753,13 @@ namespace Geld_Automaat
                     {
                         if (reader.Read())
                         {
-                            int saldo = reader.GetInt32("saldo");
+                            decimal saldo = reader.GetDecimal("saldo");
 
                             // Determine whether to add a minus sign based on the saldo
-                            string saldoText = saldo < 0 ? "-" + Math.Abs(saldo) : saldo.ToString();
+                            string saldoText = saldo < 0 ? "-" + Math.Abs(saldo).ToString("F2") : saldo.ToString("F2");
 
-                            // Update the UI element with the current balance
-                            Saldo2.Content = "Je saldo is " + saldo;
+                            // Update the UI element with the current balance as a decimal with two decimal places
+                            Saldo2.Content = "Je saldo is " + saldoText;
                         }
                     }
                 }
@@ -801,8 +796,10 @@ namespace Geld_Automaat
                     {
                         if (reader.Read())
                         {
-                            int saldo = Convert.ToInt32(reader["saldo"]);
-                            SaldoLabel.Content = "Je saldo is " + saldo;
+                            decimal saldo = reader.GetDecimal("saldo");
+
+                            // Update the SaldoLabel with the current balance as a decimal with two decimal places
+                            SaldoLabel.Content = "Je saldo is " + saldo.ToString("F2");
                         }
                     }
                 }
@@ -816,7 +813,8 @@ namespace Geld_Automaat
                 Console.WriteLine("Error: " + ex.Message);
                 MessageBox.Show("An error occurred. Please try again later.");
             }
-        }        
+        }
+
         private void Button_Terug2(object sender, RoutedEventArgs e)
         {
             string enteredRekeningnummer = RekeningnummerTextBox.Text;
@@ -838,8 +836,10 @@ namespace Geld_Automaat
                     {
                         if (reader.Read())
                         {
-                            int saldo = Convert.ToInt32(reader["saldo"]);
-                            SaldoLabel.Content = "Je saldo is " + saldo;
+                            decimal saldo = reader.GetDecimal("saldo");
+
+                            // Update the SaldoLabel with the current balance as a decimal with two decimal places
+                            SaldoLabel.Content = "Je saldo is " + saldo.ToString("F2");
                         }
                     }
                 }
@@ -854,6 +854,7 @@ namespace Geld_Automaat
                 MessageBox.Show("An error occurred. Please try again later.");
             }
         }
+
         public void Button_Transactie(object sender, RoutedEventArgs e)
         {
             string enteredRekeningnummer = RekeningnummerTextBox.Text;
@@ -1073,6 +1074,136 @@ namespace Geld_Automaat
             admindjalla2.Visibility = Visibility.Hidden;
             rekeningverwijder.Visibility = Visibility.Visible;
         }
+        private void Button_Verwijderrekening(object sender, RoutedEventArgs e)
+        {
+            string enteredRekeningnummer = rekeningremove.Text;
+            string enteredPincode = pincoderemove.Text;
+
+            if (!string.IsNullOrEmpty(enteredRekeningnummer) && !string.IsNullOrEmpty(enteredPincode))
+            {
+                try
+                {
+                    // Hash the entered pincode using SHA-256
+                    string hashedPincode = EncryptString(enteredPincode);
+
+                    myDBconnection dbConnection = new myDBconnection();
+
+                    if (dbConnection.Connect())
+                    {
+                        // Check if the rekeningnummer and hashed pincode match an existing account
+                        string checkSql = "SELECT COUNT(*) FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer AND Pincode = @Pincode";
+                        MySqlCommand checkCommand = new MySqlCommand(checkSql, dbConnection.connection);
+                        checkCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                        checkCommand.Parameters.AddWithValue("@Pincode", hashedPincode);
+                        long matchingAccounts = (long)checkCommand.ExecuteScalar();
+
+                        if (matchingAccounts > 0)
+                        {
+                            // Execute the SQL statement to remove the specific account from the 'Rekeningen' table
+                            string deleteAccountSql = "DELETE FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
+                            MySqlCommand deleteAccountCommand = new MySqlCommand(deleteAccountSql, dbConnection.connection);
+                            deleteAccountCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            int rowsAffected = deleteAccountCommand.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                MessageBox.Show("Rekeningnummer removed successfully.");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to remove rekeningnummer. Please try again.");
+                            }
+                        }
+                        else 
+                        {
+                            MessageBox.Show("Rekeningnummer or pincode does not match any existing account.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Database connection failed.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    MessageBox.Show("An error occurred. Please try again later.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a rekeningnummer and pincode.");
+            }
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            admindjalla2.Visibility = Visibility.Hidden;
+            pincodewijzigen.Visibility = Visibility.Visible;
+        }
+        private void Button_pincodewijzig(object sender, RoutedEventArgs e)
+        {
+            string enteredRekeningnummer = rekeningkiezen.Text;
+            string newPincode = pincodeverander.Password; // Use PasswordBox for pincode input
+
+            if (!string.IsNullOrEmpty(enteredRekeningnummer) && !string.IsNullOrEmpty(newPincode))
+            {
+                try
+                {
+                    // Hash the new pincode using SHA-256
+                    string hashedPincode = EncryptString(newPincode);
+
+                    myDBconnection dbConnection = new myDBconnection();
+
+                    if (dbConnection.Connect())
+                    {
+                        // Check if the rekeningnummer exists in the database
+                        string checkSql = "SELECT COUNT(*) FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
+                        MySqlCommand checkCommand = new MySqlCommand(checkSql, dbConnection.connection);
+                        checkCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                        long existingAccounts = (long)checkCommand.ExecuteScalar();
+
+                        if (existingAccounts == 1)
+                        {
+                            // Update the pincode for the rekeningnummer
+                            string updateSql = "UPDATE Rekeningen SET Pincode = @Pincode WHERE Rekeningnummer = @Rekeningnummer";
+                            MySqlCommand updateCommand = new MySqlCommand(updateSql, dbConnection.connection);
+                            updateCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            updateCommand.Parameters.AddWithValue("@Pincode", hashedPincode);
+                            int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                MessageBox.Show("Pincode successfully updated.");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to update pincode. Please try again.");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Rekeningnummer not found.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Database connection failed.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    MessageBox.Show("An error occurred. Please try again later.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a rekeningnummer and a new pincode.");
+            }
+        }
+
+
     }
 }
 

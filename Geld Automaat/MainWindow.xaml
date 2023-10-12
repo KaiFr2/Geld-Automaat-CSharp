@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Grid x:Name="homescreen" Visibility="Hidden">
+        <Grid x:Name="homescreen" Visibility="Visible">
             <TextBox x:Name="RekeningnummerTextBox" HorizontalAlignment="Left" Margin="400,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
             <TextBox x:Name="PincodeTextBox" HorizontalAlignment="Left" Margin="400,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
             <Button Content="1" Width="50" Height="50" HorizontalAlignment="Left" Margin="329,126,0,0" VerticalAlignment="Top" Click="Button_Click_num1"/>
@@ -63,10 +63,11 @@
             <PasswordBox x:Name="password" HorizontalAlignment="Center" Margin="0,201,0,0" VerticalAlignment="Top"/>
             <Button Content="Log in" HorizontalAlignment="Center" Margin="0,242,0,0" VerticalAlignment="Top" Height="58" Width="104" Click="Button_Admin_login"/>
         </Grid>
-        <Grid x:Name="admindjalla2" Visibility="Visible">
+        <Grid x:Name="admindjalla2" Visibility="Hidden">
             <Button Content="Saldo aanpassen" HorizontalAlignment="Center" Margin="0,150,0,0" VerticalAlignment="Top" Click="Button_Click_2"/>
             <Button Content="Rekening toevoegen" HorizontalAlignment="Center" Margin="0,197,0,0" VerticalAlignment="Top" Click="Button_Click_3"/>
-            <Button Content="Rekening verwijderen" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top"/>
+            <Button Content="Rekening verwijderen" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top" Click="Button_Click_4"/>
+            <Button Content="Pincode wijzigen" HorizontalAlignment="Center" Margin="0,284,0,0" VerticalAlignment="Top" Click="Button_Click_5"/>
         </Grid>
         <Grid x:Name="saldoaanpassen" Visibility="Hidden">
             <TextBox x:Name="banknummer" Margin="0,165,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
@@ -80,7 +81,14 @@
             <Button Content="Maak rekening aan" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top" Click="Button_Maakrekening"/>
         </Grid>
         <Grid x:Name="rekeningverwijder" Visibility="Hidden">
-            
+            <TextBox x:Name="rekeningremove" HorizontalAlignment="Left" Margin="338,148,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="pincoderemove"  HorizontalAlignment="Left" Margin="338,198,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <Button Content="Verwijder" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top"/>
+        </Grid>
+        <Grid x:Name="pincodewijzigen" Visibility="Hidden">
+            <TextBox x:Name="rekeningkiezen" HorizontalAlignment="Left" Margin="338,148,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <PasswordBox x:Name="pincodeverander" HorizontalAlignment="Left" Margin="338,198,0,0" VerticalAlignment="Top" Width="120"/>
+            <Button Content="Wijzig pincode" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top" Click="Button_pincodewijzig"/>
         </Grid>
     </Grid>
 </Window>
