@@ -328,130 +328,91 @@ namespace Geld_Automaat
         // Define a class-level variable to keep track of the deposit count
         private int OpnemenCount = 0;
 
+        private void DepositMoney(int amount)
+        {
+            // Check if the user has already made three deposits
+            if (OpnemenCount >= 3)
+            {
+                MessageBox.Show("You have reached the maximum number of deposits for the day (3 times).");
+                return;
+            }
+
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
+
+            myDBconnection dbConnection = new myDBconnection();
+
+            try
+            {
+                if (dbConnection.Connect())
+                {
+                    using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + @Amount WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
+
+                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
+                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            updateSaldoCommand.Parameters.AddWithValue("@Amount", amount);
+
+                            updateSaldoCommand.ExecuteNonQuery();
+
+                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, @Amount)";
+                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            insertTransactionCommand.Parameters.AddWithValue("@Amount", amount);
+
+                            insertTransactionCommand.ExecuteNonQuery();
+
+                            OpnemenCount++;
+
+                            transaction.Commit();
+                            MessageBox.Show($"Storten gelukt!. {amount} euros is toegevoegd aan je account.");
+
+                            UpdateSaldoPlus(enteredRekeningnummer);
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+
+                            Console.WriteLine("Error: " + ex.Message);
+                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
+                        }
+                    }
+                }
+                else
+                {
+                    // Connection to the database failed
+                    MessageBox.Show("Database connection failed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions, e.g., database errors
+                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("An error occurred. Please try again later.");
+            }
+        }
+
         private void Button_StortGeld100(object sender, RoutedEventArgs e)
         {
-            // Check if the user has already made three deposits
-
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
-
-            myDBconnection dbConnection = new myDBconnection();
-
-            try
-            {
-                if (dbConnection.Connect())
-                {
-                    using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
-                    {
-                        try
-                        {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 100 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
-
-                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
-                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            updateSaldoCommand.ExecuteNonQuery();
-
-                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 100)";
-                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            insertTransactionCommand.ExecuteNonQuery();
-
-                            transaction.Commit();
-
-                            MessageBox.Show("Deposit successful. 100 euros added to your account.");
-
-                            UpdateSaldoPlus(enteredRekeningnummer);
-                        }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-
-                            Console.WriteLine("Error: " + ex.Message);
-                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
-                        }
-                    }
-                }
-                else
-                {
-                    // Connection to the database failed
-                    MessageBox.Show("Database connection failed.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions, e.g., database errors
-                Console.WriteLine("Error: " + ex.Message);
-                MessageBox.Show("An error occurred. Please try again later.");
-            }
+            DepositMoney(100);
         }
 
-        //200 euro storten button
         private void Button_StortGeld200(object sender, RoutedEventArgs e)
         {
-            // Check if the user has already made three deposits
-
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
-
-            myDBconnection dbConnection = new myDBconnection();
-
-            try
-            {
-                if (dbConnection.Connect())
-                {
-                    using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
-                    {
-                        try
-                        {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 200 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
-
-                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
-                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            updateSaldoCommand.ExecuteNonQuery();
-
-                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 200)";
-                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            insertTransactionCommand.ExecuteNonQuery();
-
-                            transaction.Commit();
-
-                            MessageBox.Show("Deposit successful. 200 euros added to your account.");
-
-                            UpdateSaldoPlus(enteredRekeningnummer);
-                        }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-
-                            Console.WriteLine("Error: " + ex.Message);
-                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
-                        }
-                    }
-                }
-                else
-                {
-                    // Connection to the database failed
-                    MessageBox.Show("Database connection failed.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions, e.g., database errors
-                Console.WriteLine("Error: " + ex.Message);
-                MessageBox.Show("An error occurred. Please try again later.");
-            }
+            DepositMoney(200);
         }
 
-        //500 euro storten button
         private void Button_StortGeld500(object sender, RoutedEventArgs e)
         {
-            // Check if the user has already made three deposits
+            DepositMoney(500);
+        }
 
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
 
+        private void WithdrawAmount(int amount)
+        {
+            string enteredRekeningnummer = RekeningnummerTextBox.Text;
             myDBconnection dbConnection = new myDBconnection();
 
             try
@@ -462,31 +423,56 @@ namespace Geld_Automaat
                     {
                         try
                         {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` + 500 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
+                            string checkSaldoSql = "SELECT saldo FROM `rekeningen` WHERE `rekeningnummer` = @Rekeningnummer";
+                            MySqlCommand checkSaldoCommand = new MySqlCommand(checkSaldoSql, dbConnection.connection);
+                            checkSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
 
-                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
-                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                            // ExecuteScalar is used to retrieve the saldo from the database
+                            object result = checkSaldoCommand.ExecuteScalar();
 
-                            updateSaldoCommand.ExecuteNonQuery();
+                            if (result != null)
+                            {
+                                decimal saldo = Convert.ToDecimal(result);
 
-                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, 500)";
-                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                                if (saldo >= amount)
+                                {
+                                    string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` - @Amount WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
+                                    MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
+                                    updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                                    updateSaldoCommand.Parameters.AddWithValue("@Amount", amount);
 
-                            insertTransactionCommand.ExecuteNonQuery();
+                                    updateSaldoCommand.ExecuteNonQuery();
 
-                            transaction.Commit();
+                                    string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 1, @Amount)";
+                                    MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
+                                    insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
+                                    insertTransactionCommand.Parameters.AddWithValue("@Amount", amount);
 
-                            MessageBox.Show("Deposit successful. 500 euros added to your account.");
+                                    insertTransactionCommand.ExecuteNonQuery();
 
-                            UpdateSaldoPlus(enteredRekeningnummer);
+                                    OpnemenCount++;
+
+                                    transaction.Commit();
+                                    MessageBox.Show($"Opnemen gelukt!. {amount} euros opgenomen van je account.");
+
+                                    UpdateSaldoMin(enteredRekeningnummer);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Je hebt niet genoeg om op te nemen.");
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Rekeningnummer niet gevonden.");
+                            }
                         }
                         catch (Exception ex)
                         {
                             transaction.Rollback();
 
                             Console.WriteLine("Error: " + ex.Message);
-                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
+                            MessageBox.Show("An error occurred during the withdrawal. Please try again later.");
                         }
                     }
                 }
@@ -506,197 +492,19 @@ namespace Geld_Automaat
 
         private void Button_Opnemen100(object sender, RoutedEventArgs e)
         {
-            // Check if the user has already made three deposits
-            if (OpnemenCount >= 3)
-            {
-                MessageBox.Show("You have reached the maximum amount of withdrawing for the day (3 times).");
-                return;
-            }
-
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
-
-            myDBconnection dbConnection = new myDBconnection();
-
-            try
-            {
-                if (dbConnection.Connect())
-                {
-                    using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
-                    {
-                        try
-                        {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` - 100 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
-
-                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
-                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            updateSaldoCommand.ExecuteNonQuery();
-
-                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 1, 100)";
-                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            insertTransactionCommand.ExecuteNonQuery();
-
-                            OpnemenCount++;
-
-                            transaction.Commit();
-                            MessageBox.Show("Deposit successful. 100 euros added to your account.");
-
-                            UpdateSaldoMin(enteredRekeningnummer);
-                        }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-
-                            Console.WriteLine("Error: " + ex.Message);
-                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
-                        }
-                    }
-                }
-                else
-                {
-                    // Connection to the database failed
-                    MessageBox.Show("Database connection failed.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions, e.g., database errors
-                Console.WriteLine("Error: " + ex.Message);
-                MessageBox.Show("An error occurred. Please try again later.");
-            }
+            WithdrawAmount(100);
         }
 
-        //200 euro storten button
         private void Button_Opnemen200(object sender, RoutedEventArgs e)
         {
-            // Check if the user has already made three deposits
-            if (OpnemenCount >= 3)
-            {
-                MessageBox.Show("You have reached the maximum amount of withdrawing for the day (3 times).");
-                return;
-            }
-
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
-
-            myDBconnection dbConnection = new myDBconnection();
-
-            try
-            {
-                if (dbConnection.Connect())
-                {
-                    using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
-                    {
-                        try
-                        {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` - 200 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
-
-                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
-                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            updateSaldoCommand.ExecuteNonQuery();
-
-                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 1, 200)";
-                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            insertTransactionCommand.ExecuteNonQuery();
-
-                            OpnemenCount++;
-
-                            transaction.Commit();
-                            MessageBox.Show("Deposit successful. 100 euros added to your account.");
-
-                            UpdateSaldoMin(enteredRekeningnummer);
-                        }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-
-                            Console.WriteLine("Error: " + ex.Message);
-                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
-                        }
-                    }
-                }
-                else
-                {
-                    // Connection to the database failed
-                    MessageBox.Show("Database connection failed.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions, e.g., database errors
-                Console.WriteLine("Error: " + ex.Message);
-                MessageBox.Show("An error occurred. Please try again later.");
-            }
+            WithdrawAmount(200);
         }
 
-        //500 euro storten button
         private void Button_Opnemen500(object sender, RoutedEventArgs e)
         {
-            // Check if the user has already made three deposits
-            if (OpnemenCount >= 3)
-            {
-                MessageBox.Show("You have reached the maximum amount of withdrawing for the day (3 times).");
-                return;
-            }
-
-            string enteredRekeningnummer = RekeningnummerTextBox.Text; // Leave the rekeningnummer as is
-
-            myDBconnection dbConnection = new myDBconnection();
-
-            try
-            {
-                if (dbConnection.Connect())
-                {
-                    using (MySqlTransaction transaction = dbConnection.connection.BeginTransaction())
-                    {
-                        try
-                        {
-                            string updateSaldoSql = $"UPDATE `rekeningen` SET `saldo` = `saldo` - 500 WHERE `rekeningen`.`rekeningnummer` = @Rekeningnummer";
-
-                            MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
-                            updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            updateSaldoCommand.ExecuteNonQuery();
-
-                            string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 1, 500)";
-                            MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
-                            insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-
-                            insertTransactionCommand.ExecuteNonQuery();
-
-                            OpnemenCount++;
-
-                            transaction.Commit();
-                            MessageBox.Show("Deposit successful. 500 euros added to your account.");
-
-                            UpdateSaldoMin(enteredRekeningnummer);
-                        }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-
-                            Console.WriteLine("Error: " + ex.Message);
-                            MessageBox.Show("An error occurred during the deposit. Please try again later.");
-                        }
-                    }
-                }
-                else
-                {
-                    // Connection to the database failed
-                    MessageBox.Show("Database connection failed.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions, e.g., database errors
-                Console.WriteLine("Error: " + ex.Message);
-                MessageBox.Show("An error occurred. Please try again later.");
-            }
+            WithdrawAmount(500);
         }
+
 
 
         //Gebruiker saldo updaten
