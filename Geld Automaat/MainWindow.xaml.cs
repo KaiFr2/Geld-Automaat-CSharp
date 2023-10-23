@@ -326,16 +326,12 @@ namespace Geld_Automaat
 
         //100 euro storten button
         // Define a class-level variable to keep track of the deposit count
-        private int OpnemenCount = 0;
+        private int StortenCount = 0;
 
         private void DepositMoney(int amount)
         {
             // Check if the user has already made three deposits
-            if (OpnemenCount >= 3)
-            {
-                MessageBox.Show("You have reached the maximum number of deposits for the day (3 times).");
-                return;
-            }
+            
 
             string enteredRekeningnummer = RekeningnummerTextBox.Text;
 
@@ -363,8 +359,6 @@ namespace Geld_Automaat
                             insertTransactionCommand.Parameters.AddWithValue("@Amount", amount);
 
                             insertTransactionCommand.ExecuteNonQuery();
-
-                            OpnemenCount++;
 
                             transaction.Commit();
                             MessageBox.Show($"Storten gelukt!. {amount} euros is toegevoegd aan je account.");
@@ -412,6 +406,12 @@ namespace Geld_Automaat
 
         private void WithdrawAmount(int amount)
         {
+
+            if (StortenCount >= 3)
+            {
+                MessageBox.Show("You have reached the maximum number of deposits for the day (3 times).");
+                return;
+            }
             string enteredRekeningnummer = RekeningnummerTextBox.Text;
             myDBconnection dbConnection = new myDBconnection();
 
@@ -450,7 +450,7 @@ namespace Geld_Automaat
 
                                     insertTransactionCommand.ExecuteNonQuery();
 
-                                    OpnemenCount++;
+                                    StortenCount++;
 
                                     transaction.Commit();
                                     MessageBox.Show($"Opnemen gelukt!. {amount} euros opgenomen van je account.");
@@ -828,6 +828,7 @@ namespace Geld_Automaat
                 {
                     // Hash the pincode using SHA-256
                     string hashedPincode = EncryptString(enteredPincode);
+                    int initialSaldo = 0; 
 
                     myDBconnection dbConnection = new myDBconnection();
 
@@ -841,11 +842,12 @@ namespace Geld_Automaat
 
                         if (existingAccounts == 0)
                         {
-                            // Insert the rekeningnummer and hashed pincode into the database
-                            string insertSql = "INSERT INTO Rekeningen (Rekeningnummer, Pincode) VALUES (@Rekeningnummer, @Pincode)";
+                            // Insert the rekeningnummer, hashed pincode, and initial saldo into the database
+                            string insertSql = "INSERT INTO Rekeningen (Rekeningnummer, Pincode, Saldo) VALUES (@Rekeningnummer, @Pincode, @Saldo)";
                             MySqlCommand insertCommand = new MySqlCommand(insertSql, dbConnection.connection);
                             insertCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
                             insertCommand.Parameters.AddWithValue("@Pincode", hashedPincode);
+                            insertCommand.Parameters.AddWithValue("@Saldo", initialSaldo); // Set the initial saldo
                             int rowsAffected = insertCommand.ExecuteNonQuery();
 
                             if (rowsAffected > 0)
@@ -878,6 +880,7 @@ namespace Geld_Automaat
                 MessageBox.Show("Please enter a rekeningnummer and pincode.");
             }
         }
+
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
