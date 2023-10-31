@@ -1018,7 +1018,35 @@ namespace Geld_Automaat
             }
         }
 
+        private void Button_Opnemen10(object sender, RoutedEventArgs e)
+        {
+            WithdrawAmount(10);
+        }
 
+        private void Button_Opnemen50(object sender, RoutedEventArgs e)
+        {
+            WithdrawAmount(50);
+        }
+
+        private void Button_Opnemen150(object sender, RoutedEventArgs e)
+        {
+            WithdrawAmount(150);
+        }
+
+        private void Button_Stortgeld10(object sender, RoutedEventArgs e)
+        {
+            DepositMoney(10);
+        }
+
+        private void Button_Stortgeld50(object sender, RoutedEventArgs e)
+        {
+            DepositMoney(50);
+        }
+
+        private void Button_Stortgeld150(object sender, RoutedEventArgs e)
+        {
+            DepositMoney(150);
+        }
     }
 }
 
