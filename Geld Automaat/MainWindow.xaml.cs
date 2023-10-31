@@ -691,8 +691,6 @@ namespace Geld_Automaat
                             transactions.Add(new Transaction { Time = time, Amount = amount, Type = type });
                         }
                     }
-
-                    // Bind the transactions to the ListBox
                     TransactionListBox.ItemsSource = transactions;
                 }
                 else
@@ -826,7 +824,6 @@ namespace Geld_Automaat
             {
                 try
                 {
-                    // Hash the pincode using SHA-256
                     string hashedPincode = EncryptString(enteredPincode);
                     int initialSaldo = 0; 
 
@@ -834,7 +831,6 @@ namespace Geld_Automaat
 
                     if (dbConnection.Connect())
                     {
-                        // Check if the rekeningnummer already exists in the database
                         string checkSql = "SELECT COUNT(*) FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
                         MySqlCommand checkCommand = new MySqlCommand(checkSql, dbConnection.connection);
                         checkCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
@@ -842,7 +838,6 @@ namespace Geld_Automaat
 
                         if (existingAccounts == 0)
                         {
-                            // Insert the rekeningnummer, hashed pincode, and initial saldo into the database
                             string insertSql = "INSERT INTO Rekeningen (Rekeningnummer, Pincode, Saldo) VALUES (@Rekeningnummer, @Pincode, @Saldo)";
                             MySqlCommand insertCommand = new MySqlCommand(insertSql, dbConnection.connection);
                             insertCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
@@ -897,14 +892,12 @@ namespace Geld_Automaat
             {
                 try
                 {
-                    // Hash the entered pincode using SHA-256
                     string hashedPincode = EncryptString(enteredPincode);
 
                     myDBconnection dbConnection = new myDBconnection();
 
                     if (dbConnection.Connect())
                     {
-                        // Check if the rekeningnummer and hashed pincode match an existing account
                         string checkSql = "SELECT COUNT(*) FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer AND Pincode = @Pincode";
                         MySqlCommand checkCommand = new MySqlCommand(checkSql, dbConnection.connection);
                         checkCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
@@ -913,7 +906,6 @@ namespace Geld_Automaat
 
                         if (matchingAccounts > 0)
                         {
-                            // Execute the SQL statement to remove the specific account from the 'Rekeningen' table
                             string deleteAccountSql = "DELETE FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
                             MySqlCommand deleteAccountCommand = new MySqlCommand(deleteAccountSql, dbConnection.connection);
                             deleteAccountCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
@@ -965,14 +957,12 @@ namespace Geld_Automaat
             {
                 try
                 {
-                    // Hash the new pincode using SHA-256
                     string hashedPincode = EncryptString(newPincode);
 
                     myDBconnection dbConnection = new myDBconnection();
 
                     if (dbConnection.Connect())
                     {
-                        // Check if the rekeningnummer exists in the database
                         string checkSql = "SELECT COUNT(*) FROM Rekeningen WHERE Rekeningnummer = @Rekeningnummer";
                         MySqlCommand checkCommand = new MySqlCommand(checkSql, dbConnection.connection);
                         checkCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
@@ -980,7 +970,6 @@ namespace Geld_Automaat
 
                         if (existingAccounts == 1)
                         {
-                            // Update the pincode for the rekeningnummer
                             string updateSql = "UPDATE Rekeningen SET Pincode = @Pincode WHERE Rekeningnummer = @Rekeningnummer";
                             MySqlCommand updateCommand = new MySqlCommand(updateSql, dbConnection.connection);
                             updateCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
