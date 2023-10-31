@@ -1047,6 +1047,30 @@ namespace Geld_Automaat
         {
             DepositMoney(150);
         }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            saldoaanpassen.Visibility = Visibility.Hidden;
+            admindjalla2.Visibility = Visibility.Visible;
+        }
+
+        private void Button_Click_7(object sender, RoutedEventArgs e)
+        {
+            rekeningtoevoegen.Visibility = Visibility.Hidden;
+            admindjalla2.Visibility = Visibility.Visible;
+        }
+
+        private void Button_Click_8(object sender, RoutedEventArgs e)
+        {
+            rekeningverwijder.Visibility = Visibility.Hidden;
+            admindjalla2.Visibility= Visibility.Visible;
+        }
+
+        private void Button_Click_9(object sender, RoutedEventArgs e)
+        {
+            pincodewijzigen.Visibility = Visibility.Hidden;
+            admindjalla2.Visibility = Visibility.Visible;
+        }
     }
 }
 

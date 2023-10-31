@@ -90,6 +90,7 @@
             <Button Content="Saldo eraf" HorizontalAlignment="Left" Margin="456,274,0,0" VerticalAlignment="Top" Height="52" Width="115" Click="Button_SaldoEraf" BorderBrush="White" Background="Red"/>
             <Label Content="Rekeningnummer" HorizontalAlignment="Left" Margin="334,144,0,0" VerticalAlignment="Top" Foreground="White"/>
             <Label Content="Aantal" HorizontalAlignment="Left" Margin="334,189,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Button Content="Terug" HorizontalAlignment="Center" Margin="0,358,0,0" VerticalAlignment="Top" Height="43" Width="112" Click="Button_Click_6"/>
         </Grid>
         <Grid x:Name="rekeningtoevoegen" Visibility="Hidden">
             <TextBox x:Name="rekeningcreate" HorizontalAlignment="Left" Margin="338,148,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
@@ -97,12 +98,14 @@
             <Button Content="Maak rekening aan" HorizontalAlignment="Left" Margin="336,238,0,0" VerticalAlignment="Top" Click="Button_Maakrekening" Background="#FF68FF00" BorderBrush="White" Width="125" Height="50"/>
             <Label Content="Rekeningnummer" HorizontalAlignment="Left" Margin="332,126,0,0" VerticalAlignment="Top" Foreground="White"/>
             <Label Content="Pincode" HorizontalAlignment="Left" Margin="332,178,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Button Content="Terug" HorizontalAlignment="Center" Margin="0,358,0,0" VerticalAlignment="Top" Height="43" Width="112" Click="Button_Click_7"/>
         </Grid>
         <Grid x:Name="rekeningverwijder" Visibility="Hidden">
             <TextBox x:Name="rekeningremove" HorizontalAlignment="Left" Margin="338,148,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <TextBox x:Name="pincoderemove"  HorizontalAlignment="Left" Margin="338,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <Label Content="Rekeningnummer" HorizontalAlignment="Left" Margin="332,126,0,0" VerticalAlignment="Top" Foreground="White"/>
             <Label Content="Pincode" HorizontalAlignment="Left" Margin="332,178,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Button Content="Terug" HorizontalAlignment="Center" Margin="0,358,0,0" VerticalAlignment="Top" Height="43" Width="112" Click="Button_Click_8"/>
             <Button Content="Verwijder" HorizontalAlignment="Left" Margin="336,240,0,0" VerticalAlignment="Top" Background="Red" Click="Button_Verwijderrekening" BorderBrush="White" Width="125" Height="50"/>
         </Grid>
         <Grid x:Name="pincodewijzigen" Visibility="Hidden">
@@ -110,6 +113,7 @@
             <PasswordBox x:Name="pincodeverander" HorizontalAlignment="Left" Margin="338,198,0,0" VerticalAlignment="Top" Width="120"/>
             <Label Content="Rekeningnummer" HorizontalAlignment="Left" Margin="332,126,0,0" VerticalAlignment="Top" Foreground="White"/>
             <Label Content="Pincode" HorizontalAlignment="Left" Margin="332,178,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Button Content="Terug" HorizontalAlignment="Center" Margin="0,358,0,0" VerticalAlignment="Top" Height="43" Width="112" Click="Button_Click_9"/>
             <Button Content="Wijzig pincode" HorizontalAlignment="Left" Margin="336,240,0,0" VerticalAlignment="Top" Click="Button_pincodewijzig" Width="124" Height="50" BorderBrush="White" Background="#FF9BECF3"/>
         </Grid>
     </Grid>
