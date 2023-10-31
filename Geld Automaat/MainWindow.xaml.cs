@@ -349,14 +349,14 @@ namespace Geld_Automaat
 
                             MySqlCommand updateSaldoCommand = new MySqlCommand(updateSaldoSql, dbConnection.connection);
                             updateSaldoCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-                            updateSaldoCommand.Parameters.AddWithValue("@Amount", amount);
+                            updateSaldoCommand.Parameters.AddWithValue("@Amount", amount -2);
 
                             updateSaldoCommand.ExecuteNonQuery();
 
                             string insertTransactionSql = "INSERT INTO transacties (Rekeningen_rekeningnummer, tijd, type, hoeveel) VALUES (@Rekeningnummer, NOW(), 2, @Amount)";
                             MySqlCommand insertTransactionCommand = new MySqlCommand(insertTransactionSql, dbConnection.connection);
                             insertTransactionCommand.Parameters.AddWithValue("@Rekeningnummer", enteredRekeningnummer);
-                            insertTransactionCommand.Parameters.AddWithValue("@Amount", amount);
+                            insertTransactionCommand.Parameters.AddWithValue("@Amount", amount -2);
 
                             insertTransactionCommand.ExecuteNonQuery();
 
